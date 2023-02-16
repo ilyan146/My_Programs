@@ -4,6 +4,7 @@ import time
 import os
 
 
+
 if not os.path.exists("todos.txt"):
     with open("todos.txt","w") as file:
         pass
@@ -26,15 +27,16 @@ window = sg.Window("My To-Do App",
                            [input_box, add_button],
                            [list_box, edit_button, complete_button],
                            [exit_button]],
-                   font=("Helvetica",15))
+                   font=("Helvetica",15),finalize=True)
+window["todo"].bind("<Return>","_Enter")
 
 while True:
     event, values = window.read(timeout=300)
     window["clock"].update(time.strftime("%b %d, %Y %H:%M:%S"))
 
-    print(1, "event = ",event)
+    '''print(1, "event = ",event)
     print(2, "values of the event = ", values)
-    print(3, "written value = ", values["todos_list"])
+    print(3, "written value = ", values["todos_list"])'''
 
     if event == "Add":
         todos = functions.get_todos()
@@ -68,6 +70,13 @@ while True:
 
     elif event == "todos_list":
         window["todo"].update(value=values["todos_list"][0])
+
+    elif event == "todo" + "_Enter":
+        todos = functions.get_todos()
+        new_todo = values["todo"].capitalize() + "\n"
+        todos.append(new_todo)
+        functions.write_todos(todos)
+        window["todos_list"].update(values=todos)
 
     elif event == "Exit":
         break
