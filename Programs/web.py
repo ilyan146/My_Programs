@@ -24,6 +24,3 @@ for index,i in enumerate(todos):
 st.text_input(label="1", placeholder="Enter a todo....",
               on_change=add_todo, key="new_todo_input",
               label_visibility="hidden")
-
-st.session_state
-print("Hello")
