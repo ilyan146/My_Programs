@@ -20,16 +20,23 @@ for index, row in df.iterrows():
     pdf.set_text_color(180, 180, 180)
     pdf.cell(w=0, h=12, align="R", ln=1, txt=row["Topic"], border=0)
 
+    for i in range(40):
+        pdf.line(10,21+(10*i),200,21+(10*i))
+    # Proper way to do it is:
+    # for y in range(20,298,10):
+    # pdf.line(10,y,200,y)
 
 
     for i in range(row["Pages"] - 1):
         pdf.add_page()
-
         # Set footer
         pdf.ln(277)
         pdf.set_font(family="Times", size=8, style="I")
         pdf.set_text_color(180, 180, 180)
         pdf.cell(w=0, h=12, align="R", ln=1, txt=row["Topic"], border=0)
+
+        for i in range(40):
+            pdf.line(10, 21 + (10 * i), 200, 21 + (10 * i))
 
 
 pdf.output("output.pdf")
