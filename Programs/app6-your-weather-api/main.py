@@ -3,9 +3,12 @@ import pandas as pd
 
 app = Flask(__name__)
 
+stations_df = pd.read_csv("003 data-small/stations.txt", skiprows=17)
+stations_df = stations_df[["STAID","STANAME                                 "]]
+
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", data=stations_df.to_html())
 @app.route("/api/v1/<station>/<date>")
 def about(station, date):
     filename = "003 data-small/TG_STAID" + str(station).zfill(6) + ".txt"
