@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 import pandas as pd
+import matplotlib as plot
 
 app = Flask(__name__)
 
@@ -17,6 +18,19 @@ def about(station, date):
     return {"Station": station,
             "Date": date,
             "Temperature": temperature}
+@app.route("/api/v1/<station>/")
+def one_station_all(station):
+    filename = "003 data-small/TG_STAID" + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
+    result = df.to_dict(orient="records")
+    return result
+@app.route("/api/v1/yearly/<station>/<year>/")
+def year(station, year):
+    filename = "003 data-small/TG_STAID" + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
+    df["    DATE"] = df["    DATE"].astype(str)
+    result = df[df["    DATE"].str.startswith(str(year))].to_dict(orient="records")
+    return result
 
 if __name__ == "__main__":
     app.run(debug=True)
