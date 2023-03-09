@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+from backend import get_data
 
 st.title("Weather Forecast for the Next Days")
 
@@ -11,14 +12,21 @@ option = st.selectbox("Select data to view",("Temperature","Sky"))
 
 st.subheader(f"{option} for the next {days} days in {place}")
 
-def get_data(days):
-    dates = ["2023-01-01","2023-01-02","2023-01-03"]
-    temperature = [10,11,15]
-    temperature = [days * i for i in temperature]
-    return dates, temperature
+if place:
 
-d, t = get_data(days)
+    filtered_data = get_data(place, days)
 
-figure = px.line(x=d,y=t, labels={"x":"Dates", "y":"Temperature (C)"})
-st.plotly_chart(figure)
+    if option == "Temperature":
+        temperatures = [i["main"]["temp"] for i in filtered_data]
+        dates = [i["dt_txt"] for i in filtered_data]
+        figure = px.line(x=dates,y=temperatures, labels={"x":"Dates", "y":"Temperature (C)"})
+        st.plotly_chart(figure)
+
+    elif option == "Sky":
+        sky_conditions = [i["weather"][0]["main"] for i in filtered_data]
+        images = {"Clear": "004 images/clear.png", "Clouds":"004 images/cloud.png",
+                  "Rain": "004 images/rain.png", "Snow": "004 images/snow.png"}
+        image_paths = [images[i] for i in sky_conditions]
+        st.image(image_paths, width=115)
+
 
