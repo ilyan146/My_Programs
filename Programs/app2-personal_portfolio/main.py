@@ -13,7 +13,7 @@ with col2:
     st.title("Mohamed Ilyan")
     content = """
     This is a trial content description and we will be making a nice summary of my experience and skillset here!!
-    Also try to see how the content of this is displayed in the browser!!
+    Also try to see how the content of this is displayed in the browser!! - Re commit to push to new repository!
     """
     st.info(content)
 
